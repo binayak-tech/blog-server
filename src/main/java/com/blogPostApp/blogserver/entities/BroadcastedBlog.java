@@ -15,5 +15,30 @@ public class BroadcastedBlog {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    // Getters and setters
+    // constructors
+    public BroadcastedBlog() {
+    }
+
+    public BroadcastedBlog(Post post, LocalDateTime createdAt) {
+        this.post = post;
+        this.createdAt = createdAt;
+    }
+
+    // getters and setters
+    public Post getPost() {
+        return post;
+    }
+
+    public void setPost(Post post) {
+        this.post = post;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
 }

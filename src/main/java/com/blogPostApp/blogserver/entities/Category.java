@@ -16,5 +16,41 @@ public class Category {
     @OneToMany(mappedBy = "category")
     private List<Post> posts;
 
+    // constructors
+    public Category() {
+    }
+
+    public Category(int id, String name, List<Post> posts) {
+        this.id = id;
+        this.name = name;
+        this.posts = posts;
+    }
+
+    // getters and setters
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
+    }
+
     // Getters and setters
+
 }
