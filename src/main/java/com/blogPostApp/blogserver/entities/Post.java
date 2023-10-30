@@ -18,7 +18,7 @@ public class Post {
     @Column(nullable = false, unique = true)
     private String slug;
 
-    @Column(columnDefinition = "TEXT", nullable = false)
+    @Column(columnDefinition = "TEXT")
     private String summary;
 
     @Column(columnDefinition = "TEXT", nullable = false)

@@ -16,13 +16,12 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
     private String password;
 
     @Column(name = "profile_picture")
     private String profilePicture;
 
-    @Column(columnDefinition = "TEXT", nullable = false)
+    @Column(columnDefinition = "TEXT", nullable = true)
     private String bio;
 
     @Column(nullable = false)
