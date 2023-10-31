@@ -9,7 +9,7 @@ import com.blogPostApp.blogserver.entities.User;
 import com.blogPostApp.blogserver.services.UserService;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/users")
 public class UserController {
 
     @Autowired

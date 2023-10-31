@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class StatusController {
     @GetMapping("/")
     public String showMessage() {
-        return "This website is working fine";
+        return "This website is working nicely";
     }
 }
