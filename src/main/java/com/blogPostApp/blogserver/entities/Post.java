@@ -5,8 +5,12 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 @Entity
 @Table(name = "posts")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,14 +42,9 @@ public class Post {
     @OneToMany(mappedBy = "post")
     private List<Like> likes;
 
-    @OneToOne(mappedBy = "post")
+    @OneToOne(mappedBy = "post", cascade = CascadeType.ALL)
+    @JoinColumn(name = "id", referencedColumnName = "post_id") // Match this with the primary key of BroadcastedBlog
     private BroadcastedBlog broadcastedBlog;
-
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
-
-    @Column(nullable = false)
-    private LocalDateTime updatedAt;
 
     // constructors
     public Post() {
@@ -64,8 +63,6 @@ public class Post {
         this.comments = comments;
         this.likes = likes;
         this.broadcastedBlog = broadcastedBlog;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
     }
 
     // getters and setters
@@ -148,23 +145,4 @@ public class Post {
     public void setBroadcastedBlog(BroadcastedBlog broadcastedBlog) {
         this.broadcastedBlog = broadcastedBlog;
     }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    // Getters and setters
-
 }

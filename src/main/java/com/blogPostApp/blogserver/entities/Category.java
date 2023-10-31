@@ -51,6 +51,4 @@ public class Category {
         this.posts = posts;
     }
 
-    // Getters and setters
-
 }

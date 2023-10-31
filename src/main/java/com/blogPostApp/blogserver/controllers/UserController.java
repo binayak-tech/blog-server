@@ -1,50 +1,44 @@
 package com.blogPostApp.blogserver.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.blogPostApp.blogserver.entities.User;
 import com.blogPostApp.blogserver.services.UserService;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 public class UserController {
-    private final UserService userService;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
+    @Autowired
+    private UserService userService;
+
+    // User registration
+    @PostMapping("/register")
+    public ResponseEntity<User> registerUser(@RequestBody User user) {
+        User newUser = userService.registerUser(user);
+        return new ResponseEntity<>(newUser, HttpStatus.CREATED);
     }
 
-    @GetMapping
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
-    }
-
-    @GetMapping("/{userId}")
-    public ResponseEntity<User> getUserById(@PathVariable Integer userId) {
-        User user = userService.getUserById(userId);
-        if (user != null) {
-            return ResponseEntity.ok(user);
-        } else {
-            return ResponseEntity.notFound().build();
+    // User login
+    @PostMapping("/login")
+    public ResponseEntity<User> loginUser(@RequestBody User user) {
+        User loggedInUser = userService.loginUser(user.getUsername(), user.getPassword());
+        if (loggedInUser == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
+        return new ResponseEntity<>(loggedInUser, HttpStatus.OK);
     }
 
-    @PostMapping
-    public User createUser(@RequestBody User user) {
-        return userService.createUser(user);
-    }
-
+    // Edit user profile
     @PutMapping("/{userId}")
-    public User updateUser(@PathVariable Integer userId, @RequestBody User user) {
-        user.setId(userId);
-        return userService.updateUser(user);
-    }
-
-    @DeleteMapping("/{userId}")
-    public void deleteUser(@PathVariable Integer userId) {
-        userService.deleteUser(userId);
+    public ResponseEntity<User> editUserProfile(@PathVariable int userId, @RequestBody User updatedUser) {
+        User editedUser = userService.editUserProfile(userId, updatedUser);
+        if (editedUser == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(editedUser, HttpStatus.OK);
     }
 }

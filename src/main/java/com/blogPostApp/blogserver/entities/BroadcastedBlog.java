@@ -8,30 +8,26 @@ import jakarta.persistence.*;
 @Table(name = "broadcasted_blogs")
 public class BroadcastedBlog {
     @Id
-    @OneToOne
-    @JoinColumn(name = "post_id")
-    private Post post;
+    @Column(name = "post_id")
+    private int postId;
 
-    @Column(nullable = false)
+    @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
+
+    @OneToOne
+    @JoinColumn(name = "post_id", referencedColumnName = "id") // Match this with the primary key of Post
+    private Post post;
 
     // constructors
     public BroadcastedBlog() {
     }
 
-    public BroadcastedBlog(Post post, LocalDateTime createdAt) {
-        this.post = post;
+    public BroadcastedBlog(int postId, LocalDateTime createdAt) {
+        this.postId = postId;
         this.createdAt = createdAt;
     }
 
     // getters and setters
-    public Post getPost() {
-        return post;
-    }
-
-    public void setPost(Post post) {
-        this.post = post;
-    }
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
@@ -39,6 +35,14 @@ public class BroadcastedBlog {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public int getPostId() {
+        return postId;
+    }
+
+    public void setPostId(int postId) {
+        this.postId = postId;
     }
 
 }
