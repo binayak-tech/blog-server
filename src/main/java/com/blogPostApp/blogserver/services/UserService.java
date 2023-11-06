@@ -6,41 +6,30 @@ import org.springframework.stereotype.Service;
 import com.blogPostApp.blogserver.entities.User;
 import com.blogPostApp.blogserver.repositories.UserRepository;
 
+import java.util.Optional;
+
 @Service
 public class UserService {
 
     @Autowired
     private UserRepository userRepository;
 
-    public User registerUser(User user) {
-        // Implement user registration logic, including validation, hashing passwords,
-        // and saving to the database.
-        // Return the registered user.
+    public User getUserProfile(String userName) {
+        Optional<User> userOptional = userRepository.findByUserName(userName);
 
-        return userRepository.save(user);
-    }
-
-    public User loginUser(String username, String password) {
-        // Implement user login logic, including password validation.
-        // Return the logged-in user or null if authentication fails.
-
-        User user = userRepository.findByUsername(username);
-        if (user != null && user.getPassword().equals(password)) {
-            return user;
+        if (userOptional.isPresent()) {
+            return userOptional.get();
+        } else {
+            return null; // You may also consider throwing a custom exception
         }
-        return null;
     }
 
-    public User editUserProfile(int userId, User updatedUser) {
-        // Retrieve the user by userId and ensure the user exists.
-        User existingUser = userRepository.findById(userId).orElse(null);
+
+    public User editUserProfile(String userName, User updatedUser) {
+        User existingUser = userRepository.findByUserName(userName).orElse(null);
         if (existingUser == null) {
             return null;
         }
-
-        // Update user profile fields that can be modified (e.g., bio, profile picture).
-        // Ensure any necessary validation and security checks.
-
         existingUser.setBio(updatedUser.getBio());
         existingUser.setProfilePicture(updatedUser.getProfilePicture());
 
