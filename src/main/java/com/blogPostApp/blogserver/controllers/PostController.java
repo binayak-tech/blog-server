@@ -18,9 +18,6 @@ public class PostController {
     // Endpoint to create a new blog post
     @PostMapping("/create")
     public ResponseEntity<Post> createPost(@RequestBody Post post) {
-        // You can perform validation here before saving the post
-        // For example, check if the user is authorized to create a post
-        // Ensure the category specified exists, etc.
 
         Post savedPost = postService.createPost(post);
         return new ResponseEntity<>(savedPost, HttpStatus.CREATED);
