@@ -1,5 +1,7 @@
 package com.blogPostApp.blogserver.controllers;
 
+import com.blogPostApp.blogserver.config.JwtService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,14 +10,42 @@ import org.springframework.web.bind.annotation.*;
 import com.blogPostApp.blogserver.entities.Post;
 import com.blogPostApp.blogserver.services.PostService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/posts")
 public class PostController {
 
-    @Autowired
-    private PostService postService;
+    private final PostService postService;
+    private final JwtService jwtService;
 
+    @Autowired
+    public PostController(PostService postService, JwtService jwtService) {
+        this.postService = postService;
+        this.jwtService = jwtService;
+    }
     // Endpoint to create a new blog post
+    private String getCurrentUsername(HttpServletRequest request) {
+        String authorizationHeader = request.getHeader("Authorization");
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            String jwtToken = authorizationHeader.substring(7); // Remove "Bearer " prefix
+            return jwtService.extractUserNameFromJwtToken(jwtToken);
+        }
+        return null;
+    }
+    // Endpoint to get posts for the dashboard
+    @GetMapping("/dashboard")
+    public ResponseEntity<List<Integer>> getDashboardPosts(HttpServletRequest request) {
+        String currentUsername = getCurrentUsername(request);
+
+        if (currentUsername != null) {
+            List<Integer> dashboardPostIds = postService.getDashboardPostIds(currentUsername);
+            return new ResponseEntity<>(dashboardPostIds, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
     @PostMapping("/create")
     public ResponseEntity<Post> createPost(@RequestBody Post post) {
 

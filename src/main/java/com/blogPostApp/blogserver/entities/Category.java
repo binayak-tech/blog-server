@@ -1,8 +1,16 @@
 package com.blogPostApp.blogserver.entities;
 
 import jakarta.persistence.*;
-import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.util.List;
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "categories")
 public class Category {
@@ -17,14 +25,6 @@ public class Category {
     private List<Post> posts;
 
     // constructors
-    public Category() {
-    }
-
-    public Category(int id, String name, List<Post> posts) {
-        this.id = id;
-        this.name = name;
-        this.posts = posts;
-    }
 
     // getters and setters
     public int getId() {

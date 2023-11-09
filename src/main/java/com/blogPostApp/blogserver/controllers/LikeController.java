@@ -19,24 +19,20 @@ import com.blogPostApp.blogserver.services.LikeService;
 @RestController
 @RequestMapping("/api/likes")
 public class LikeController {
-
     @Autowired
     private LikeService likeService;
-
     // Endpoint to like a post
     @PostMapping("/like")
     public ResponseEntity<Like> likePost(@RequestBody Like like) {
         Like newLike = likeService.addLike(like);
         return new ResponseEntity<>(newLike, HttpStatus.CREATED);
     }
-
     // Endpoint to get likes for a post
     @GetMapping("/post/{postId}")
     public ResponseEntity<List<Like>> getLikesForPost(@PathVariable int postId) {
         List<Like> likes = likeService.getLikesForPost(postId);
         return new ResponseEntity<>(likes, HttpStatus.OK);
     }
-
     // Endpoint to remove a like
     @DeleteMapping("/{likeId}")
     public ResponseEntity<String> removeLike(@PathVariable int likeId) {

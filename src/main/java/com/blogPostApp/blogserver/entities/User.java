@@ -2,6 +2,7 @@ package com.blogPostApp.blogserver.entities;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -53,14 +54,13 @@ public class User implements UserDetails {
     @JoinTable(name = "followers", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "following_user_id"))
     private List<User> following;
 
-    @Enumerated(EnumType.STRING)
-    private Role role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        return authorities;
     }
-
     @Override
     public String getPassword() {
         return userPassword;
@@ -91,5 +91,4 @@ public class User implements UserDetails {
     }
 
     // Getters and setters
-
 }

@@ -1,11 +1,14 @@
 package com.blogPostApp.blogserver.services;
 
+import com.blogPostApp.blogserver.entities.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.blogPostApp.blogserver.entities.User;
 import com.blogPostApp.blogserver.repositories.UserRepository;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -35,4 +38,5 @@ public class UserService {
 
         return userRepository.save(existingUser);
     }
+
 }

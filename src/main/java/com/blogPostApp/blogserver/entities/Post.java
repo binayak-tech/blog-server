@@ -7,7 +7,15 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "posts")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
@@ -28,6 +36,9 @@ public class Post {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
+    @Column(name = "created_at", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private LocalDateTime createdDate;
+
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
@@ -46,86 +57,58 @@ public class Post {
     @JoinColumn(name = "id", referencedColumnName = "post_id") // Match this with the primary key of BroadcastedBlog
     private BroadcastedBlog broadcastedBlog;
 
-    // constructors
-    public Post() {
-    }
 
-    public Post(int id, String title, String slug, String summary, String content, Category category, User user,
-            List<Comment> comments, List<Like> likes, BroadcastedBlog broadcastedBlog, LocalDateTime createdAt,
-            LocalDateTime updatedAt) {
-        this.id = id;
-        this.title = title;
-        this.slug = slug;
-        this.summary = summary;
-        this.content = content;
-        this.category = category;
-        this.user = user;
-        this.comments = comments;
-        this.likes = likes;
-        this.broadcastedBlog = broadcastedBlog;
-    }
 
+    @PrePersist
+    protected void onCreate() {
+        createdDate = LocalDateTime.now();
+    }
     // getters and setters
     public int getId() {
         return id;
     }
-
     public void setId(int id) {
         this.id = id;
     }
-
     public String getTitle() {
         return title;
     }
-
     public void setTitle(String title) {
         this.title = title;
     }
-
     public String getSlug() {
         return slug;
     }
-
     public void setSlug(String slug) {
         this.slug = slug;
     }
-
     public String getSummary() {
         return summary;
     }
-
     public void setSummary(String summary) {
         this.summary = summary;
     }
-
     public String getContent() {
         return content;
     }
-
     public void setContent(String content) {
         this.content = content;
     }
-
     public Category getCategory() {
         return category;
     }
-
     public void setCategory(Category category) {
         this.category = category;
     }
-
     public User getUser() {
         return user;
     }
-
     public void setUser(User user) {
         this.user = user;
     }
-
     public List<Comment> getComments() {
         return comments;
     }
-
     public void setComments(List<Comment> comments) {
         this.comments = comments;
     }

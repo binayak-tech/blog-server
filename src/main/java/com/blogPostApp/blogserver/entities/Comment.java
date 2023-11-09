@@ -3,7 +3,15 @@ package com.blogPostApp.blogserver.entities;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "comments")
 public class Comment {
@@ -26,16 +34,6 @@ public class Comment {
     private LocalDateTime createdAt;
 
     // constructor
-    public Comment() {
-    }
-
-    public Comment(int id, Post post, User user, String content, LocalDateTime createdAt) {
-        this.id = id;
-        this.post = post;
-        this.user = user;
-        this.content = content;
-        this.createdAt = createdAt;
-    }
 
     // getters and setters
     public int getId() {

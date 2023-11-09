@@ -3,7 +3,15 @@ package com.blogPostApp.blogserver.entities;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "broadcasted_blogs")
 public class BroadcastedBlog {
@@ -17,15 +25,6 @@ public class BroadcastedBlog {
     @OneToOne
     @JoinColumn(name = "post_id", referencedColumnName = "id") // Match this with the primary key of Post
     private Post post;
-
-    // constructors
-    public BroadcastedBlog() {
-    }
-
-    public BroadcastedBlog(int postId, LocalDateTime createdAt) {
-        this.postId = postId;
-        this.createdAt = createdAt;
-    }
 
     // getters and setters
 

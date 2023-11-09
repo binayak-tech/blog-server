@@ -1,7 +1,6 @@
 package com.blogPostApp.blogserver.auth;
 
 import com.blogPostApp.blogserver.config.JwtService;
-import com.blogPostApp.blogserver.entities.Role;
 import com.blogPostApp.blogserver.entities.User;
 import com.blogPostApp.blogserver.repositories.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,7 +28,6 @@ public class AuthenticationService {
                 .userName(request.getUserName())
                 .email(request.getEmail())
                 .userPassword(passwordEncoder.encode(request.getUserPassword()))
-                .role(Role.USER)
                 .build();
         repository.save(user);
         var jwtToken = jwtService.generateToken(user);
