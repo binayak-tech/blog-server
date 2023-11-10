@@ -1,5 +1,6 @@
 package com.blogPostApp.blogserver.services;
 
+import com.blogPostApp.blogserver.dto.UserDTO;
 import com.blogPostApp.blogserver.entities.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,26 +18,34 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public User getUserProfile(String userName) {
+    public UserDTO getUserProfile(String userName) {
         Optional<User> userOptional = userRepository.findByUserName(userName);
 
-        if (userOptional.isPresent()) {
-            return userOptional.get();
-        } else {
-            return null; // You may also consider throwing a custom exception
-        }
+        return userOptional.map(user -> new UserDTO(
+                user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getProfilePicture(),
+                user.getBio()
+        )).orElse(null);
     }
 
-
-    public User editUserProfile(String userName, User updatedUser) {
+    public UserDTO editUserProfile(String userName, UserDTO updatedUserDTO) {
         User existingUser = userRepository.findByUserName(userName).orElse(null);
         if (existingUser == null) {
             return null;
         }
-        existingUser.setBio(updatedUser.getBio());
-        existingUser.setProfilePicture(updatedUser.getProfilePicture());
+        existingUser.setBio(updatedUserDTO.getBio());
+        existingUser.setProfilePicture(updatedUserDTO.getProfilePicture());
 
-        return userRepository.save(existingUser);
+        User savedUser = userRepository.save(existingUser);
+
+        return new UserDTO(
+                savedUser.getId(),
+                savedUser.getUsername(),
+                savedUser.getEmail(),
+                savedUser.getProfilePicture(),
+                savedUser.getBio()
+        );
     }
-
 }

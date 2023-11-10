@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.blogPostApp.blogserver.dto.PostDTO;
 import com.blogPostApp.blogserver.entities.Category;
 import com.blogPostApp.blogserver.entities.User;
 import com.blogPostApp.blogserver.repositories.UserRepository;
@@ -18,16 +19,46 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private  final CategoryService categoryService;
 
-    public PostService(PostRepository postRepository, UserRepository userRepository) {
+    public PostService(PostRepository postRepository, UserRepository userRepository, CategoryService categoryService) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
+        this.categoryService = categoryService;
     }
 
-    public Post createPost(Post post) {
-        // Perform any additional business logic or validation before saving the post
+    public PostDTO convertToDTO(Post post) {
+        PostDTO postDTO = new PostDTO();
+        postDTO.setId(post.getId());
+        postDTO.setTitle(post.getTitle());
+        postDTO.setSlug(post.getSlug());
+        postDTO.setSummary(post.getSummary());
+        postDTO.setContent(post.getContent());
+        postDTO.setCreatedDate(post.getCreatedDate());
+        // Map other fields as needed
+        return postDTO;
+    }
+
+    public Post createPost(PostDTO postDTO) {
+        User user = userRepository.findById(postDTO.getUser_id()).orElse(null);
+        Category category = categoryService.getCategoryById(postDTO.getCategory_id());
+
+        if (user == null || category == null) {
+            // Handle the case where user or category is not found
+            return null;
+        }
+
+        Post post = new Post();
+        post.setTitle(postDTO.getTitle());
+        post.setSlug(postDTO.getSlug());
+        post.setSummary(postDTO.getSummary());
+        post.setContent(postDTO.getContent());
+        post.setCategory(category);
+        post.setUser(user);
+
         return postRepository.save(post);
     }
+
 
     public List<Integer> getDashboardPostIds(String username) {
         // Implement logic to retrieve post IDs for the user's own posts
@@ -48,13 +79,11 @@ public class PostService {
         return postRepository.findById(postId).orElse(null);
     }
 
-    public List<Post> getAllPosts() {
-        return postRepository.findAll();
-    }
     public Post updatePost(Post post) {
         // You can add business logic or validation before updating
         return postRepository.save(post);
     }
+
     public void deletePost(Post post) {
         postRepository.delete(post);
     }

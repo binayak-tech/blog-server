@@ -2,6 +2,7 @@ package com.blogPostApp.blogserver.controllers;
 
 import java.util.List;
 
+import com.blogPostApp.blogserver.dto.LikeDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
@@ -19,21 +20,22 @@ import com.blogPostApp.blogserver.services.LikeService;
 @RestController
 @RequestMapping("/api/likes")
 public class LikeController {
+
     @Autowired
     private LikeService likeService;
-    // Endpoint to like a post
+
     @PostMapping("/like")
-    public ResponseEntity<Like> likePost(@RequestBody Like like) {
-        Like newLike = likeService.addLike(like);
+    public ResponseEntity<LikeDTO> likePost(@RequestBody Like like) {
+        LikeDTO newLike = likeService.addLike(like);
         return new ResponseEntity<>(newLike, HttpStatus.CREATED);
     }
-    // Endpoint to get likes for a post
-    @GetMapping("/post/{postId}")
-    public ResponseEntity<List<Like>> getLikesForPost(@PathVariable int postId) {
-        List<Like> likes = likeService.getLikesForPost(postId);
-        return new ResponseEntity<>(likes, HttpStatus.OK);
+
+    @GetMapping("/{postId}")
+    public ResponseEntity<Integer> getLikeCountForPost(@PathVariable int postId) {
+        int likeCount = likeService.getLikeCountForPost(postId);
+        return new ResponseEntity<>(likeCount, HttpStatus.OK);
     }
-    // Endpoint to remove a like
+
     @DeleteMapping("/{likeId}")
     public ResponseEntity<String> removeLike(@PathVariable int likeId) {
         likeService.removeLike(likeId);

@@ -1,6 +1,7 @@
 package com.blogPostApp.blogserver.controllers;
 
 import com.blogPostApp.blogserver.config.JwtService;
+import com.blogPostApp.blogserver.dto.UserDTO;
 import com.blogPostApp.blogserver.entities.Category;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,14 +34,14 @@ public class UserController {
         return null;
     }
     @GetMapping("/profile")
-    public ResponseEntity<User> getUserProfile(HttpServletRequest request) {
+    public ResponseEntity<UserDTO> getUserProfile(HttpServletRequest request) {
         String currentUsername = getCurrentUsername(request);
 
         if (currentUsername != null) {
-            User user = userService.getUserProfile(currentUsername);
+            UserDTO userDTO = userService.getUserProfile(currentUsername);
 
-            if (user != null) {
-                return new ResponseEntity<>(user, HttpStatus.OK);
+            if (userDTO != null) {
+                return new ResponseEntity<>(userDTO, HttpStatus.OK);
             } else {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
@@ -54,7 +55,7 @@ public class UserController {
         String currentUsername = getCurrentUsername(request);
 
         if (currentUsername != null) {
-            User user = userService.getUserProfile(currentUsername);
+            UserDTO user = userService.getUserProfile(currentUsername);
 
             if (user != null) {
                 return new ResponseEntity<>(user.getId(), HttpStatus.OK);
@@ -69,11 +70,11 @@ public class UserController {
 
     // Edit user profile
     @PutMapping("/{userName}")
-    public ResponseEntity<User> editUserProfile(@PathVariable String userName, @RequestBody User updatedUser) {
-        User editedUser = userService.editUserProfile(userName, updatedUser);
-        if (editedUser == null) {
+    public ResponseEntity<UserDTO> editUserProfile(@PathVariable String userName, @RequestBody UserDTO updatedUserDTO) {
+        UserDTO editedUserDTO = userService.editUserProfile(userName, updatedUserDTO);
+        if (editedUserDTO == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(editedUser, HttpStatus.OK);
+        return new ResponseEntity<>(editedUserDTO, HttpStatus.OK);
     }
 }

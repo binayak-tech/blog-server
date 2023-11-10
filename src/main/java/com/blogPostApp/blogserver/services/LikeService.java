@@ -2,6 +2,7 @@ package com.blogPostApp.blogserver.services;
 
 import java.util.List;
 
+import com.blogPostApp.blogserver.dto.LikeDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,18 +15,16 @@ public class LikeService {
     @Autowired
     private LikeRepository likeRepository;
 
-    public Like addLike(Like like) {
-        // Implement logic to add a new like and return the like object.
-        return likeRepository.save(like);
+    public LikeDTO addLike(Like like) {
+        Like newLike = likeRepository.save(like);
+        return newLike.toDTO();
     }
 
-    public List<Like> getLikesForPost(int postId) {
-        // Implement logic to retrieve all likes for a post with the given postId.
-        return likeRepository.findAllByPostId(postId);
+    public int getLikeCountForPost(int postId) {
+        return likeRepository.findAllByPostId(postId).size();
     }
 
     public void removeLike(int likeId) {
-        // Implement logic to remove a like with the given likeId.
         likeRepository.deleteById(likeId);
     }
 }
