@@ -16,5 +16,7 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
     // Custom query to get post IDs for the posts from users the current user is following
     @Query("SELECT p.id FROM Post p INNER JOIN p.user.following u WHERE u.userName = :username")
     List<Integer> findPostIdsByFollowing(@Param("username") String username);
+
+    List<Post> findByCategory_Id(int categoryId);
 }
 

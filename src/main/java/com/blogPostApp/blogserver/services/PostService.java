@@ -3,6 +3,7 @@ package com.blogPostApp.blogserver.services;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.blogPostApp.blogserver.dto.PostDTO;
 import com.blogPostApp.blogserver.entities.Category;
@@ -25,6 +26,15 @@ public class PostService {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
         this.categoryService = categoryService;
+    }
+
+    public List<PostDTO> getPostsByCategory(int categoryId) {
+        List<Post> posts = postRepository.findByCategory_Id(categoryId);
+
+        // Convert the list of Post entities to a list of PostDTOs
+        return posts.stream()
+                .map(PostDTO::fromEntity)
+                .collect(Collectors.toList());
     }
 
     public PostDTO convertToDTO(Post post) {

@@ -112,6 +112,19 @@ public class PostController {
         }
     }
 
+
+    @GetMapping("/category/{categoryId}")
+    public ResponseEntity<List<PostDTO>> getPostsByCategory(@PathVariable int categoryId) {
+        try {
+            List<PostDTO> posts = postService.getPostsByCategory(categoryId);
+            return new ResponseEntity<>(posts, HttpStatus.OK);
+        } catch (Exception e) {
+            // Log the exception for debugging purposes
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @DeleteMapping("/{postId}")
     public ResponseEntity<String> deletePost(@PathVariable int postId) {
         try {
